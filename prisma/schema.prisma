@@ -1,0 +1,70 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String
+  name      String?
+  role      String     @default("gym_owner") // gym_owner, member
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relations
+  members   Member[]
+  workouts  Workout[]
+  sessions  Session[]
+
+  @@map("users")
+}
+
+model Member {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  name      String
+  gymOwnerId String
+  gymOwner  User       @relation(fields: [gymOwnerId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relations
+  workouts  Workout[]
+
+  @@map("members")
+}
+
+model Workout {
+  id        String     @id @default(cuid())
+  memberId  String
+  member    Member     @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise  String
+  sets      Int
+  reps      Int
+  weight    Float?
+  duration  Int?       // in minutes
+  notes     String?
+  date      DateTime   @default(now())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("workouts")
+}
+
+model Session {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime   @default(now())
+
+  @@map("sessions")
+}
