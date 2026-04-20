@@ -61,27 +61,82 @@ Independent gym owners often track member workouts across scattered notes, text 
            |                          |                          |
            v                          v                          v
 
-[Screen 3: Workouts]          [Screen 4: Analytics]         [Screen 5: AI Insights]
-+--------------------------+  +---------------------------+  +-----------------------+
-| LOGO ... Workouts        |  | LOGO ... Analytics        |  | LOGO ... AI Insights  |
-|--------------------------|  |---------------------------|  |-----------------------|
-| Filters                  |  | Filters                   |  | Prompt Composer       |
-| Member: [All v]          |  | Range: [30d v]            |  | Member: [Sarah v]     |
-| Date:   [2026-04-15]     |  | Member: [All v]           |  | Goal:   [Strength v]  |
-| Type:   [Strength v]     |  | Metric: [Volume v]        |  | Question:             |
-|--------------------------|  |---------------------------|  | [Deload next week?]   |
-| Log Workout              |  | Charts                    |  | [ Generate Insight ]  |
-| Exercise: [Squat      ]  |  | +-----------------------+ |  |-----------------------|
-| Sets: [4] Reps: [8]      |  | | Frequency Trend       | |  | AI Response           |
-| Weight: [185] Duration:[]|  | +-----------------------+ |  | - Reduce volume 15%   |
-| Notes: [Felt strong    ] |  | +-----------------------+ |  | - Keep intensity RPE7 |
-| [ Save Workout ]         |  | | Total Volume Bars     | |  | - Add 1 rest day      |
-|--------------------------|  | +-----------------------+ |  | [ Regenerate ]        |
-| History (Newest First)   |  | Insights Cards            |  | Safety Banner:         |
-| 04/15 Squat 4x8 @185     |  | - Top improvers           |  | Coach review required. |
-| 04/13 Bench 5x5 @155     |  | - Declining consistency   |  +-----------------------+
-| [Edit] [Delete]          |  | - Suggested coaching      |
-+--------------------------+  +---------------------------+
+[Screen 3: Workouts]
++--------------------------------------------------------------------------------+
+| LOGO | Dashboard | Workouts | Analytics | AI Insights | Profile | Logout      |
+|--------------------------------------------------------------------------------|
+| Workouts                                     [ Add Workout ] [ Export CSV ]    |
+|--------------------------------------------------------------------------------|
+| Filters: Member [All v]  Date [2026-04-15]  Type [Strength v]  Coach [Rob v]  |
+| Search: [ Mike / Squat / Notes...                          ] [ Apply ] [ Reset ]|
+|--------------------------------------------------------------------------------|
+| +-----------------------------------------------+   +------------------------+ |
+| | Log Workout                                   |   | Session Snapshot       | |
+| | Exercise: [Back Squat                      ]  |   | Completed Today: 12    | |
+| | Sets: [4]  Reps: [8]  Weight: [185]  RPE:[7] |   | Missed This Week: 3    | |
+| | Duration: [45 min]  Rest: [120 sec]          |   | Avg Intensity: RPE 7.2 | |
+| | Notes: [Felt strong through final two sets ]  |   | PR Alerts: 2 pending   | |
+| | [ Save Workout ] [ Save + Add Another ]       |   +------------------------+ |
+| +-----------------------------------------------+                            |
+|                                                                                |
+| History (Newest First)                                                      |
+| 04/15  Mike T  Back Squat  4x8 @185  RPE7   Notes: smooth tempo              |
+| 04/13  Sarah L Bench Press 5x5 @155  RPE8   Notes: shoulder stable           |
+| 04/12  Adam K  Deadlift    3x5 @245  RPE8   Notes: reduce volume next block  |
+| Actions: [View] [Edit] [Delete] [Duplicate]                                   |
++--------------------------------------------------------------------------------+
+
+[Screen 4: Analytics]
++--------------------------------------------------------------------------------+
+| LOGO | Dashboard | Workouts | Analytics | AI Insights | Profile | Logout      |
+|--------------------------------------------------------------------------------|
+| Analytics                                   [ Compare Periods ] [ Export PDF ] |
+|--------------------------------------------------------------------------------|
+| Filters: Range [30d v]  Member [All v]  Metric [Volume v]  Segment [All v]    |
+| Trend Type: [ Weekly v ]  Goal Focus: [ Strength v ]  [ Apply ] [ Reset ]     |
+|--------------------------------------------------------------------------------|
+| +-----------------------------------------------+   +------------------------+ |
+| | Volume Trend                                  |   | Insights Summary       | |
+| | Jan: 8.4k  Feb: 9.1k  Mar: 9.8k  Apr: 10.2k   |   | Top Improver: Sarah L  | |
+| | (Line chart rising with slight dip week 2)    |   | At-Risk: 5 members     | |
+| +-----------------------------------------------+   | Adherence: 82% avg      | |
+| +-----------------------------------------------+   | Recovery Flags: 3       | |
+| | Session Frequency by Member                   |   +------------------------+ |
+| | Mike T: 4/wk  Sarah L: 3/wk  Adam K: 2/wk     |                            |
+| | (Bar chart with goal marker at 3 sessions)    |                            |
+| +-----------------------------------------------+                            |
+|                                                                                |
+| Coaching Recommendations:                                                      |
+| - Increase lower-body volume 10% for members above 90% adherence              |
+| - Trigger outreach when attendance drops below 2 sessions for 2 weeks          |
+| - Schedule deload guidance for high-fatigue group next microcycle              |
++--------------------------------------------------------------------------------+
+
+[Screen 5: AI Insights]
++--------------------------------------------------------------------------------+
+| LOGO | Dashboard | Workouts | Analytics | AI Insights | Profile | Logout      |
+|--------------------------------------------------------------------------------|
+| AI Insights                              [ New Prompt ] [ Save to Member Plan ] |
+|--------------------------------------------------------------------------------|
+| Prompt Builder: Member [Sarah L v]  Goal [Strength v]  Time Horizon [2 weeks] |
+| Context Toggles: [x] Attendance  [x] Volume  [x] Recovery Notes  [ ] Nutrition |
+| Question: [ Deload next week while preserving bench progress?                ] |
+| [ Generate Insight ] [ Regenerate ] [ Copy ] [ Attach to Check-In ]            |
+|--------------------------------------------------------------------------------|
+| +-----------------------------------------------+   +------------------------+ |
+| | AI Response                                   |   | Safety + Review        | |
+| | Suggested Plan:                               |   | Coach review required  | |
+| | 1) Reduce total volume by 15% for 5 days      |   | before member delivery | |
+| | 2) Keep intensity near RPE 7 on compounds     |   | Confidence: Medium     | |
+| | 3) Add one extra rest day after heavy bench   |   | Last Updated: 3:42 PM  | |
+| | 4) Re-evaluate bar speed after deload block   |   +------------------------+ |
+| +-----------------------------------------------+                            |
+|                                                                                |
+| Prompt / Response History                                                       |
+| - 04/20 3:42 PM  Sarah L  "Deload timing"      Status: Reviewed               |
+| - 04/18 1:12 PM  Mike T   "Plateau on squat"   Status: Needs follow-up        |
+| - 04/16 9:04 AM  Adam K   "Recovery dip"       Status: Applied                |
++--------------------------------------------------------------------------------+
 
 [Shared Interaction Notes]
 - Login success -> Dashboard
