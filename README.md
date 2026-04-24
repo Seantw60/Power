@@ -5,138 +5,23 @@ Bonus Goal: introduce a guided path for AWS EC2 deployment using GitHub Actions 
 
 Independent gym owners often track member workouts across scattered notes, text messages, and spreadsheets, which makes coaching quality inconsistent and progress hard to measure. Without a centralized system, owners lose time on admin work and miss opportunities to retain members through data-driven programming. This matters because member churn directly impacts gym revenue and growth. Power solves this by giving gym owners one place to log workouts, review analytics, and generate AI-assisted coaching insights.
 
-## Wireframe (Text Draft)
+## Wireframe
 
-```
+
 [Screen 1: Login]
-+--------------------------------------------------------------+
-| POWER LOGO                                Power Gym Portal   |
-|--------------------------------------------------------------|
-|                                                              |
-|                 +----------------------------------+         |
-|                 | Sign In                          |         |
-|                 |----------------------------------|         |
-|                 | Email                            |         |
-|                 | [ rob@launchpadphilly.org     ] |         |
-|                 |                                  |         |
-|                 | Password                         |         |
-|                 | [ ***************              ] |         |
-|                 | [ ] Show password                |         |
-|                 |                                  |         |
-|                 | [ Sign In ]                      |         |
-|                 |                                  |         |
-|                 | Demo: rob@launchpadphilly.org   |         |
-|                 |       password123               |         |
-|                 +----------------------------------+         |
-|                                                              |
-|  Error state: "Invalid credentials" shown inline under form |
-+--------------------------------------------------------------+
-
-                               |
-                               v
+![Login Screen Wireframe](./public/Login.png)
 
 [Screen 2: Dashboard]
-+--------------------------------------------------------------------------------+
-| LOGO | Dashboard | Workouts | Analytics | AI Insights | Profile | Logout      |
-|--------------------------------------------------------------------------------|
-| Dashboard                                              [ Add Workout ]          |
-|--------------------------------------------------------------------------------|
-| +-------------------+ +-------------------+ +-------------------+              |
-| | Active Members    | | Workouts This Week| | Avg Attendance    |              |
-| | 47                | | 126               | | 82%               |              |
-| +-------------------+ +-------------------+ +-------------------+              |
-|                                                                                |
-| +-----------------------------------------------+   +------------------------+ |
-| | Activity Feed                                 |   | Context Panel          | |
-| | - Mike T: Bench +10 lbs                       |   | Upcoming Sessions      | |
-| | - 3 missed sessions this week                 |   | - 4:30 PM Sarah L      | |
-| | - Reminder: update Deload plans               |   | At-Risk Members        | |
-| +-----------------------------------------------+   | - 5 low attendance     | |
-|                                                     +------------------------+ |
-|                                                                                |
-| Quick Actions: [Add Workout] [Add Member] [History] [Open AI Insights]        |
-+--------------------------------------------------------------------------------+
-
-           +--------------------------+--------------------------+
-           |                          |                          |
-           v                          v                          v
+![Dashboard Wireframe](./public/Dashboard.png)
 
 [Screen 3: Workouts]
-+--------------------------------------------------------------------------------+
-| LOGO | Dashboard | Workouts | Analytics | AI Insights | Profile | Logout      |
-|--------------------------------------------------------------------------------|
-| Workouts                                     [ Add Workout ] [ Export CSV ]    |
-|--------------------------------------------------------------------------------|
-| Filters: Member [All v]  Date [2026-04-15]  Type [Strength v]  Coach [Rob v]  |
-| Search: [ Mike / Squat / Notes...                          ] [ Apply ] [ Reset ]|
-|--------------------------------------------------------------------------------|
-| +-----------------------------------------------+   +------------------------+ |
-| | Log Workout                                   |   | Session Snapshot       | |
-| | Exercise: [Back Squat                      ]  |   | Completed Today: 12    | |
-| | Sets: [4]  Reps: [8]  Weight: [185]  RPE:[7] |   | Missed This Week: 3    | |
-| | Duration: [45 min]  Rest: [120 sec]          |   | Avg Intensity: RPE 7.2 | |
-| | Notes: [Felt strong through final two sets ]  |   | PR Alerts: 2 pending   | |
-| | [ Save Workout ] [ Save + Add Another ]       |   +------------------------+ |
-| +-----------------------------------------------+                            |
-|                                                                                |
-| History (Newest First)                                                      |
-| 04/15  Mike T  Back Squat  4x8 @185  RPE7   Notes: smooth tempo              |
-| 04/13  Sarah L Bench Press 5x5 @155  RPE8   Notes: shoulder stable           |
-| 04/12  Adam K  Deadlift    3x5 @245  RPE8   Notes: reduce volume next block  |
-| Actions: [View] [Edit] [Delete] [Duplicate]                                   |
-+--------------------------------------------------------------------------------+
+![Workouts Screen Wireframe](./public/Workouts.png)
 
 [Screen 4: Analytics]
-+--------------------------------------------------------------------------------+
-| LOGO | Dashboard | Workouts | Analytics | AI Insights | Profile | Logout      |
-|--------------------------------------------------------------------------------|
-| Analytics                                   [ Compare Periods ] [ Export PDF ] |
-|--------------------------------------------------------------------------------|
-| Filters: Range [30d v]  Member [All v]  Metric [Volume v]  Segment [All v]    |
-| Trend Type: [ Weekly v ]  Goal Focus: [ Strength v ]  [ Apply ] [ Reset ]     |
-|--------------------------------------------------------------------------------|
-| +-----------------------------------------------+   +------------------------+ |
-| | Volume Trend                                  |   | Insights Summary       | |
-| | Jan: 8.4k  Feb: 9.1k  Mar: 9.8k  Apr: 10.2k   |   | Top Improver: Sarah L  | |
-| | (Line chart rising with slight dip week 2)    |   | At-Risk: 5 members     | |
-| +-----------------------------------------------+   | Adherence: 82% avg      | |
-| +-----------------------------------------------+   | Recovery Flags: 3       | |
-| | Session Frequency by Member                   |   +------------------------+ |
-| | Mike T: 4/wk  Sarah L: 3/wk  Adam K: 2/wk     |                            |
-| | (Bar chart with goal marker at 3 sessions)    |                            |
-| +-----------------------------------------------+                            |
-|                                                                                |
-| Coaching Recommendations:                                                      |
-| - Increase lower-body volume 10% for members above 90% adherence              |
-| - Trigger outreach when attendance drops below 2 sessions for 2 weeks          |
-| - Schedule deload guidance for high-fatigue group next microcycle              |
-+--------------------------------------------------------------------------------+
+![Analytics Screen Wireframe](./public/Analytics.png)
 
 [Screen 5: AI Insights]
-+--------------------------------------------------------------------------------+
-| LOGO | Dashboard | Workouts | Analytics | AI Insights | Profile | Logout      |
-|--------------------------------------------------------------------------------|
-| AI Insights                              [ New Prompt ] [ Save to Member Plan ] |
-|--------------------------------------------------------------------------------|
-| Prompt Builder: Member [Sarah L v]  Goal [Strength v]  Time Horizon [2 weeks] |
-| Context Toggles: [x] Attendance  [x] Volume  [x] Recovery Notes  [ ] Nutrition |
-| Question: [ Deload next week while preserving bench progress?                ] |
-| [ Generate Insight ] [ Regenerate ] [ Copy ] [ Attach to Check-In ]            |
-|--------------------------------------------------------------------------------|
-| +-----------------------------------------------+   +------------------------+ |
-| | AI Response                                   |   | Safety + Review        | |
-| | Suggested Plan:                               |   | Coach review required  | |
-| | 1) Reduce total volume by 15% for 5 days      |   | before member delivery | |
-| | 2) Keep intensity near RPE 7 on compounds     |   | Confidence: Medium     | |
-| | 3) Add one extra rest day after heavy bench   |   | Last Updated: 3:42 PM  | |
-| | 4) Re-evaluate bar speed after deload block   |   +------------------------+ |
-| +-----------------------------------------------+                            |
-|                                                                                |
-| Prompt / Response History                                                       |
-| - 04/20 3:42 PM  Sarah L  "Deload timing"      Status: Reviewed               |
-| - 04/18 1:12 PM  Mike T   "Plateau on squat"   Status: Needs follow-up        |
-| - 04/16 9:04 AM  Adam K   "Recovery dip"       Status: Applied                |
-+--------------------------------------------------------------------------------+
+![AI Insights Wireframe](./public/Insights.png)
 
 [Shared Interaction Notes]
 - Login success -> Dashboard
@@ -145,6 +30,7 @@ Independent gym owners often track member workouts across scattered notes, text 
 - Analytics with no data -> empty card "Log workouts to see trends"
 - AI request loading -> skeleton response panel + retry on error
 
+```
 [Mobile Layout Snapshot]
 +--------------------------------------+
 | [=] Power              [Profile]     |
