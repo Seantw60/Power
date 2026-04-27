@@ -20,6 +20,7 @@ export function LoginScreen() {
 
     if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
       setError("")
+      document.cookie = "power_session=demo; path=/; max-age=86400; SameSite=Lax"
       router.push("/dashboard")
       return
     }

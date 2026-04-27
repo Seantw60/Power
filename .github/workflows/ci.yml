@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    name: Install, Lint & Structure Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test -- --run
+
+      - name: Check required files exist
+        run: |
+          echo "Checking schema.prisma..."
+          test -f prisma/schema.prisma || (echo "MISSING: prisma/schema.prisma" && exit 1)
+
+          echo "Checking middleware.ts..."
+          test -f middleware.ts || (echo "MISSING: middleware.ts" && exit 1)
+
+          echo "Checking app folder structure..."
+          test -d app/\(auth\)/login || (echo "MISSING: app/(auth)/login" && exit 1)
+          test -d app/dashboard || (echo "MISSING: app/dashboard" && exit 1)
+          test -d app/workouts || (echo "MISSING: app/workouts" && exit 1)
+          test -d app/analytics || (echo "MISSING: app/analytics" && exit 1)
+          test -d app/ai || (echo "MISSING: app/ai" && exit 1)
+
+          echo "All required files and folders present."
