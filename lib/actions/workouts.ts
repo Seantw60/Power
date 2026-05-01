@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { getCurrentUser } from "@/lib/session"
 import { revalidatePath } from "next/cache"
 
 export type WorkoutFormState = {
@@ -46,10 +47,7 @@ export async function createWorkout(
     return { status: "error", message: "Please fix the errors below", errors }
   }
 
-  // Look up the demo gym owner
-  const user = await prisma.user.findUnique({
-    where: { email: "rob@launchpadphilly.org" },
-  })
+  const user = await getCurrentUser()
 
   if (!user) {
     return { status: "error", message: "Session user not found. Please log in again." }

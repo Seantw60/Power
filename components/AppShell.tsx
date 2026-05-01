@@ -23,6 +23,15 @@ export function AppShell({ title, subtitle, actions, children }: AppShellProps) 
   const pathname = usePathname()
   const router = useRouter()
 
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+    })
+
+    router.replace("/login")
+    router.refresh()
+  }
+
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#f0f9ff,_#dbeafe_45%,_#ecfeff_100%)] p-2 pb-20 text-[#10233f] sm:p-6 sm:pb-6">
       <motion.div
@@ -56,7 +65,7 @@ export function AppShell({ title, subtitle, actions, children }: AppShellProps) 
             </div>
 
             <button
-              onClick={() => router.push("/login")}
+              onClick={handleLogout}
               className="border border-[#1d4f91] bg-[#e0efff] px-3 py-1 text-xs text-[#0f3f75] transition hover:bg-[#cfe6ff]"
             >
               Logout

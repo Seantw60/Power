@@ -1,8 +1,9 @@
 "use client"
 
 import { MotionButton } from "@/components/ui/MotionButton"
+import { sanitizeRedirectPath } from "@/lib/utils"
 import { motion } from "framer-motion"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 
 const DEMO_EMAIL = "rob@launchpadphilly.org"
@@ -10,22 +11,42 @@ const DEMO_PASSWORD = "password123"
 
 export function LoginScreen() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [email, setEmail] = useState(DEMO_EMAIL)
   const [password, setPassword] = useState(DEMO_PASSWORD)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setError("")
+    setIsSubmitting(true)
 
-    if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
-      setError("")
-      document.cookie = "power_session=demo; path=/; max-age=86400; SameSite=Lax"
-      router.push("/dashboard")
-      return
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+
+      if (!response.ok) {
+        const body = (await response.json()) as { message?: string }
+        setError(body.message ?? "Invalid credentials")
+        return
+      }
+
+      const from = sanitizeRedirectPath(searchParams.get("from"))
+
+      router.replace(from)
+      router.refresh()
+    } catch {
+      setError("Unable to sign in right now. Please try again.")
+    } finally {
+      setIsSubmitting(false)
     }
-
-    setError("Invalid credentials")
   }
 
   return (
@@ -75,7 +96,9 @@ export function LoginScreen() {
                   </button>
 
                   <div className="pt-2">
-                    <MotionButton type="submit" className="min-w-28">Sign In</MotionButton>
+                    <MotionButton type="submit" className="min-w-28" disabled={isSubmitting}>
+                      {isSubmitting ? "Signing In..." : "Sign In"}
+                    </MotionButton>
                   </div>
 
                   <div className="border border-[#8a8a8a] bg-[#d8d8d8] p-2 text-center text-sm">

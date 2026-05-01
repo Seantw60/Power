@@ -267,7 +267,7 @@ By the end of Tuesday, associates should submit or show:
 
 #### Auth Flow Explanation (Written)
 
-When a user submits the login form, their email and password are checked against the stored credentials. If they match, a session is created and the user is redirected to the dashboard. If they do not match, an error message is displayed and the user stays on the login page. The dashboard requires an active session to access — if a user navigates directly to `/dashboard` without being authenticated, they are redirected back to the login page. This protection ensures that workout data and member information are only visible to authenticated gym owners.
+When a user submits the login form, the client sends a `POST` request to `/api/auth/login` with email and password. The backend looks up the user in PostgreSQL through Prisma and verifies the password hash with bcrypt. If credentials are valid, the server creates a record in the `Session` table, sets an HttpOnly `power_session` cookie, and redirects the user to the dashboard (or requested protected page). If credentials are invalid, the API returns a `401` response and the login page shows an error without redirecting. Protected routes require a valid, unexpired session tied to the cookie, so direct access without authentication redirects back to `/login`.
 
 ### Week 4
 
@@ -352,6 +352,11 @@ By the end of Tuesday, associates should submit or show:
   - One display issue
   - One question about how the data gets from DB to UI
 
+#### Flow Explanation
+
+When a gym owner submits the workout form, the `createWorkout` Server Action is called with the raw form data. The action validates all required fields — member, exercise name, sets, and reps — and returns inline field errors if anything is missing or invalid. If validation passes, the action calls `getCurrentUser()` to read the authenticated session from the database, confirms the selected member belongs to that gym owner, then calls `prisma.workout.create()` to persist the workout and its exercise items in a single nested write. After saving, `revalidatePath("/workouts")` tells Next.js to re-fetch the page's server data so the new workout immediately appears in the history list below the form — no page reload required. The data flows from the form → Server Action → Prisma → PostgreSQL and back up to the screen automatically through Next.js's server component re-render.
+
+If the user is not authenticated when the action runs, it returns an error state and the form displays "Session user not found. Please log in again." No workout is saved.
 ---
 
 ## Week 1 Setup

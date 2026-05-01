@@ -112,23 +112,61 @@ export function WorkoutsScreen({ members, workouts }: WorkoutsScreenProps) {
       </div>
 
       <FadeCard className="mt-4">
-        <h2 className="text-xl leading-none sm:text-2xl">History (Newest First)</h2>
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-xl leading-none sm:text-2xl">Workout History</h2>
+          {workouts.length > 0 ? (
+            <span className="text-xs text-[#305175] sm:text-sm">{workouts.length} session{workouts.length !== 1 ? "s" : ""} logged</span>
+          ) : null}
+        </div>
+
         {workouts.length === 0 ? (
-          <p className="mt-3 text-xs sm:text-sm">No workouts logged yet. Submit your first session above.</p>
+          <div className="mt-4 border border-dashed border-[#89aed7] bg-[#f4f9ff] px-4 py-6 text-center">
+            <p className="text-sm font-semibold text-[#1d4f91]">No workouts logged yet</p>
+            <p className="mt-1 text-xs text-[#305175]">Use the form above to log your first session. It will appear here once saved.</p>
+          </div>
         ) : (
-          <ul className="mt-3 space-y-2 text-xs leading-tight sm:text-sm">
+          <ul className="mt-3 space-y-3">
             {workouts.map((workout) => (
-              <li key={workout.id} className="border border-[#89aed7] bg-white px-2 py-2">
-                <p className="font-semibold">{workout.member.name} · {new Date(workout.date).toLocaleDateString()}</p>
-                <ul className="mt-1 space-y-1">
-                  {workout.items.map((item) => (
-                    <li key={item.id}>
-                      {item.exerciseName} - {item.sets}x{item.reps}
-                      {item.weight !== null ? ` @ ${item.weight} lbs` : ""}
-                    </li>
-                  ))}
-                </ul>
-                {workout.notes ? <p className="mt-1 text-[#305175]">Notes: {workout.notes}</p> : null}
+              <li key={workout.id} className="border border-[#89aed7] bg-white shadow-[1px_1px_0_#c3d9ee]">
+                <div className="flex items-center justify-between border-b border-[#c3d9ee] bg-[#eef5ff] px-3 py-2">
+                  <span className="text-sm font-semibold text-[#0f3f75] sm:text-base">{workout.member.name}</span>
+                  <span className="text-xs text-[#305175] sm:text-sm">
+                    {new Date(workout.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
+                  </span>
+                </div>
+
+                <div className="px-3 py-2">
+                  {workout.items.length > 0 ? (
+                    <table className="w-full text-xs sm:text-sm">
+                      <thead>
+                        <tr className="border-b border-[#e2edf8] text-left text-[10px] uppercase tracking-wide text-[#4a7aab] sm:text-xs">
+                          <th className="pb-1 pr-3 font-medium">Exercise</th>
+                          <th className="pb-1 pr-3 font-medium">Sets</th>
+                          <th className="pb-1 pr-3 font-medium">Reps</th>
+                          <th className="pb-1 font-medium">Weight</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#eef4fb]">
+                        {workout.items.map((item) => (
+                          <tr key={item.id} className="text-[#10233f]">
+                            <td className="py-1 pr-3">{item.exerciseName}</td>
+                            <td className="py-1 pr-3">{item.sets}</td>
+                            <td className="py-1 pr-3">{item.reps}</td>
+                            <td className="py-1">{item.weight !== null ? `${item.weight} lbs` : "—"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <p className="text-xs text-[#4a7aab]">No exercises recorded for this session.</p>
+                  )}
+
+                  {workout.notes ? (
+                    <p className="mt-2 border-t border-[#e2edf8] pt-2 text-xs text-[#305175]">
+                      <span className="font-medium">Notes:</span> {workout.notes}
+                    </p>
+                  ) : null}
+                </div>
               </li>
             ))}
           </ul>

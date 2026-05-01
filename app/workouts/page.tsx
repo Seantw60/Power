@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import { requireUser } from "@/lib/session"
 import { WorkoutsScreen } from "@/components/screens/WorkoutsScreen"
 
 export const metadata = {
@@ -6,14 +7,7 @@ export const metadata = {
 }
 
 export default async function WorkoutsPage() {
-  const user = await prisma.user.findUnique({
-    where: { email: "rob@launchpadphilly.org" },
-    select: { id: true },
-  })
-
-  if (!user) {
-    return <WorkoutsScreen members={[]} workouts={[]} />
-  }
+  const user = await requireUser("/workouts")
 
   const [members, workouts] = await Promise.all([
     prisma.member.findMany({
