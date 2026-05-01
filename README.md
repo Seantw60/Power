@@ -357,6 +357,11 @@ By the end of Tuesday, associates should submit or show:
 When a gym owner submits the workout form, the `createWorkout` Server Action is called with the raw form data. The action validates all required fields — member, exercise name, sets, and reps — and returns inline field errors if anything is missing or invalid. If validation passes, the action calls `getCurrentUser()` to read the authenticated session from the database, confirms the selected member belongs to that gym owner, then calls `prisma.workout.create()` to persist the workout and its exercise items in a single nested write. After saving, `revalidatePath("/workouts")` tells Next.js to re-fetch the page's server data so the new workout immediately appears in the history list below the form — no page reload required. The data flows from the form → Server Action → Prisma → PostgreSQL and back up to the screen automatically through Next.js's server component re-render.
 
 If the user is not authenticated when the action runs, it returns an error state and the form displays "Session user not found. Please log in again." No workout is saved.
+
+### Week 5
+
+#### Monday
+
 ---
 
 ## Week 1 Setup
@@ -429,3 +434,25 @@ prisma/           # Prisma schema & migrations
 - **Session**: User sessions for authentication
 
 See `prisma/schema.prisma` for full schema.
+
+## Week 3 and Week 4 Completion Notes
+
+### Week 3 Monday — Relationship Notes
+
+Each gym owner (User) owns many members through the Member `ownerId` foreign key. A Member can have many Workout sessions, and each Workout can have many WorkoutItem rows for individual exercises. This keeps ownership, session metadata, and exercise details separated so queries stay simple and reliable.
+
+### Week 3 Monday — Migration Workflow Notes
+
+Prisma migrations capture schema updates as versioned SQL files so the same database changes can be applied consistently in every environment. We generate a migration with `prisma migrate dev`, review the SQL output, and commit it with the schema change. This protects the app from schema drift and makes rollout and rollback workflows predictable.
+
+### Week 3 Tuesday — Auth Flow Explanation
+
+When login is submitted, the app posts credentials to `app/api/auth/login/route.ts`, validates them against Prisma user records, and verifies the password hash. On success, the backend creates a Session row and sets the HttpOnly `power_session` cookie; on failure it returns a 401 with no redirect. Protected routes such as dashboard and workouts check the cookie/session and redirect unauthorized requests to `/login`.
+
+### Week 4 Tuesday — Read/Query Explanation
+
+Workout history in `app/workouts/page.tsx` is fetched server-side with Prisma using the authenticated user id, including linked member and item data in one query. The read source is PostgreSQL through Prisma, not hard-coded arrays. If no rows are returned, the UI renders an explicit empty state card so the owner still gets clear feedback.
+
+### Week 4 Tuesday — Form-to-Display Explanation
+
+Submitting the workout form runs validation and save logic, then writes Workout and WorkoutItem data through Prisma. After save, `revalidatePath("/workouts")` causes fresh server data to load and the new workout appears in the history list immediately. This closes the full loop from form input to persisted record to visible UI.

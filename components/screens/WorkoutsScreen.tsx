@@ -90,7 +90,8 @@ export function WorkoutsScreen({ members, workouts }: WorkoutsScreenProps) {
 
             <label className="sm:col-span-2">
               <span className="mb-1 block">Notes</span>
-              <textarea name="notes" rows={3} className="w-full border border-[#89aed7] bg-white px-2 py-1 text-[#10233f]" placeholder="Optional session notes" />
+              <textarea name="notes" rows={3} className="w-full border border-[#89aed7] bg-white px-2 py-1 text-[#10233f]" placeholder="How did the session feel?" />
+              {state.errors?.notes ? <span className="mt-1 block text-[11px] text-[#b12525]">{state.errors.notes}</span> : null}
             </label>
 
             <div className="mt-1 flex flex-wrap gap-2 sm:col-span-2">

@@ -24,31 +24,49 @@ async function main() {
 
   await prisma.member.upsert({
     where: { email: "sarah@example.com" },
-    update: {},
+    update: {
+      age: 29,
+      goal: "Build lower-body strength",
+      ownerId: user.id,
+    },
     create: {
       email: "sarah@example.com",
       name: "Sarah L",
-      gymOwnerId: user.id,
+      age: 29,
+      goal: "Build lower-body strength",
+      ownerId: user.id,
     },
   })
 
   await prisma.member.upsert({
     where: { email: "mike@example.com" },
-    update: {},
+    update: {
+      age: 34,
+      goal: "Increase conditioning",
+      ownerId: user.id,
+    },
     create: {
       email: "mike@example.com",
       name: "Mike T",
-      gymOwnerId: user.id,
+      age: 34,
+      goal: "Increase conditioning",
+      ownerId: user.id,
     },
   })
 
   await prisma.member.upsert({
     where: { email: "adam@example.com" },
-    update: {},
+    update: {
+      age: 41,
+      goal: "Improve consistency",
+      ownerId: user.id,
+    },
     create: {
       email: "adam@example.com",
       name: "Adam K",
-      gymOwnerId: user.id,
+      age: 41,
+      goal: "Improve consistency",
+      ownerId: user.id,
     },
   })
 

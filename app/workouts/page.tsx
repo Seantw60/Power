@@ -11,7 +11,7 @@ export default async function WorkoutsPage() {
 
   const [members, workouts] = await Promise.all([
     prisma.member.findMany({
-      where: { gymOwnerId: user.id },
+      where: { ownerId: user.id },
       orderBy: { name: "asc" },
     }),
     prisma.workout.findMany({
