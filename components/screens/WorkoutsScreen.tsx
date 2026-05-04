@@ -2,9 +2,16 @@
 
 import { AppShell, FadeCard } from "@/components/AppShell"
 import { MotionButton } from "@/components/ui/MotionButton"
-import { createWorkout, type WorkoutFormState } from "@/lib/actions/workouts"
+import {
+  createWorkout,
+  deleteWorkout,
+  type WorkoutDeleteFormState,
+  type WorkoutEditFormState,
+  type WorkoutFormState,
+  updateWorkout,
+} from "@/lib/actions/workouts"
 import type { Member, Workout, WorkoutItem } from "@prisma/client"
-import { useActionState } from "react"
+import { useActionState, useEffect, useState } from "react"
 
 type WorkoutWithItems = Workout & {
   member: Member
@@ -19,6 +26,144 @@ type WorkoutsScreenProps = {
 const initialState: WorkoutFormState = {
   status: "idle",
   message: "",
+}
+
+const initialEditState: WorkoutEditFormState = {
+  status: "idle",
+  message: "",
+}
+
+const initialDeleteState: WorkoutDeleteFormState = {
+  status: "idle",
+  message: "",
+}
+
+function WorkoutHistoryCard({ workout }: { workout: WorkoutWithItems }) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
+  const [editState, editAction, isEditPending] = useActionState(updateWorkout, initialEditState)
+  const [deleteState, deleteAction, isDeletePending] = useActionState(deleteWorkout, initialDeleteState)
+
+  useEffect(() => {
+    if (editState.status === "success") {
+      setIsEditing(false)
+    }
+  }, [editState.status])
+
+  return (
+    <li className="border border-[#89aed7] bg-white shadow-[1px_1px_0_#c3d9ee]">
+      <div className="flex items-center justify-between border-b border-[#c3d9ee] bg-[#eef5ff] px-3 py-2">
+        <span className="text-sm font-semibold text-[#0f3f75] sm:text-base">{workout.member.name}</span>
+        <span className="text-xs text-[#305175] sm:text-sm">
+          {new Date(workout.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
+        </span>
+      </div>
+
+      <div className="px-3 py-2">
+        {editState.status === "error" && !editState.errors ? (
+          <p className="mb-2 border border-[#b12525] bg-[#ffe9e9] px-2 py-1 text-xs text-[#7e1b1b] sm:text-sm">{editState.message}</p>
+        ) : null}
+        {deleteState.status === "error" ? (
+          <p className="mb-2 border border-[#b12525] bg-[#ffe9e9] px-2 py-1 text-xs text-[#7e1b1b] sm:text-sm">{deleteState.message}</p>
+        ) : null}
+
+        <div className="mb-2 flex flex-wrap gap-2">
+          <MotionButton type="button" variant="secondary" onClick={() => setIsEditing((value) => !value)} disabled={isEditPending || isDeletePending}>
+            {isEditing ? "Cancel Edit" : "Edit Session"}
+          </MotionButton>
+
+          {isDeleteConfirmOpen ? (
+            <>
+              <form action={deleteAction}>
+                <input type="hidden" name="workoutId" value={workout.id} />
+                <MotionButton type="submit" disabled={isDeletePending || isEditPending}>
+                  {isDeletePending ? "Deleting..." : "Confirm Delete"}
+                </MotionButton>
+              </form>
+              <MotionButton type="button" variant="secondary" onClick={() => setIsDeleteConfirmOpen(false)} disabled={isDeletePending || isEditPending}>
+                Keep Workout
+              </MotionButton>
+            </>
+          ) : (
+            <MotionButton type="button" onClick={() => setIsDeleteConfirmOpen(true)} disabled={isDeletePending || isEditPending}>
+              Delete Session
+            </MotionButton>
+          )}
+        </div>
+
+        {isEditing ? (
+          <form action={editAction} className="mb-3 grid gap-2 border border-[#c3d9ee] bg-[#f8fbff] p-2 text-xs sm:grid-cols-2 sm:text-sm">
+            <input type="hidden" name="workoutId" value={workout.id} />
+
+            <label>
+              <span className="mb-1 block">Date</span>
+              <input
+                name="date"
+                type="date"
+                defaultValue={new Date(workout.date).toISOString().slice(0, 10)}
+                className="w-full border border-[#89aed7] bg-white px-2 py-1 text-[#10233f]"
+              />
+              {editState.errors?.date ? <span className="mt-1 block text-[11px] text-[#b12525]">{editState.errors.date}</span> : null}
+            </label>
+
+            <label className="sm:col-span-2">
+              <span className="mb-1 block">Notes</span>
+              <textarea
+                name="notes"
+                rows={3}
+                defaultValue={workout.notes}
+                className="w-full border border-[#89aed7] bg-white px-2 py-1 text-[#10233f]"
+                placeholder="Update session notes"
+              />
+              {editState.errors?.notes ? <span className="mt-1 block text-[11px] text-[#b12525]">{editState.errors.notes}</span> : null}
+            </label>
+
+            {editState.errors?.workoutId ? <p className="text-[11px] text-[#b12525] sm:col-span-2">{editState.errors.workoutId}</p> : null}
+
+            <div className="flex gap-2 sm:col-span-2">
+              <MotionButton type="submit" disabled={isEditPending || isDeletePending}>
+                {isEditPending ? "Saving..." : "Save Changes"}
+              </MotionButton>
+              <MotionButton type="button" variant="secondary" onClick={() => setIsEditing(false)} disabled={isEditPending || isDeletePending}>
+                Close
+              </MotionButton>
+            </div>
+          </form>
+        ) : null}
+
+        {workout.items.length > 0 ? (
+          <table className="w-full text-xs sm:text-sm">
+            <thead>
+              <tr className="border-b border-[#e2edf8] text-left text-[10px] uppercase tracking-wide text-[#4a7aab] sm:text-xs">
+                <th className="pb-1 pr-3 font-medium">Exercise</th>
+                <th className="pb-1 pr-3 font-medium">Sets</th>
+                <th className="pb-1 pr-3 font-medium">Reps</th>
+                <th className="pb-1 font-medium">Weight</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#eef4fb]">
+              {workout.items.map((item) => (
+                <tr key={item.id} className="text-[#10233f]">
+                  <td className="py-1 pr-3">{item.exerciseName}</td>
+                  <td className="py-1 pr-3">{item.sets}</td>
+                  <td className="py-1 pr-3">{item.reps}</td>
+                  <td className="py-1">{item.weight !== null ? `${item.weight} lbs` : "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="text-xs text-[#4a7aab]">No exercises recorded for this session.</p>
+        )}
+
+        {workout.notes ? (
+          <p className="mt-2 border-t border-[#e2edf8] pt-2 text-xs text-[#305175]">
+            <span className="font-medium">Notes:</span> {workout.notes}
+          </p>
+        ) : null}
+      </div>
+    </li>
+  )
 }
 
 export function WorkoutsScreen({ members, workouts }: WorkoutsScreenProps) {
@@ -128,47 +273,7 @@ export function WorkoutsScreen({ members, workouts }: WorkoutsScreenProps) {
         ) : (
           <ul className="mt-3 space-y-3">
             {workouts.map((workout) => (
-              <li key={workout.id} className="border border-[#89aed7] bg-white shadow-[1px_1px_0_#c3d9ee]">
-                <div className="flex items-center justify-between border-b border-[#c3d9ee] bg-[#eef5ff] px-3 py-2">
-                  <span className="text-sm font-semibold text-[#0f3f75] sm:text-base">{workout.member.name}</span>
-                  <span className="text-xs text-[#305175] sm:text-sm">
-                    {new Date(workout.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
-                  </span>
-                </div>
-
-                <div className="px-3 py-2">
-                  {workout.items.length > 0 ? (
-                    <table className="w-full text-xs sm:text-sm">
-                      <thead>
-                        <tr className="border-b border-[#e2edf8] text-left text-[10px] uppercase tracking-wide text-[#4a7aab] sm:text-xs">
-                          <th className="pb-1 pr-3 font-medium">Exercise</th>
-                          <th className="pb-1 pr-3 font-medium">Sets</th>
-                          <th className="pb-1 pr-3 font-medium">Reps</th>
-                          <th className="pb-1 font-medium">Weight</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#eef4fb]">
-                        {workout.items.map((item) => (
-                          <tr key={item.id} className="text-[#10233f]">
-                            <td className="py-1 pr-3">{item.exerciseName}</td>
-                            <td className="py-1 pr-3">{item.sets}</td>
-                            <td className="py-1 pr-3">{item.reps}</td>
-                            <td className="py-1">{item.weight !== null ? `${item.weight} lbs` : "—"}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  ) : (
-                    <p className="text-xs text-[#4a7aab]">No exercises recorded for this session.</p>
-                  )}
-
-                  {workout.notes ? (
-                    <p className="mt-2 border-t border-[#e2edf8] pt-2 text-xs text-[#305175]">
-                      <span className="font-medium">Notes:</span> {workout.notes}
-                    </p>
-                  ) : null}
-                </div>
-              </li>
+              <WorkoutHistoryCard key={workout.id} workout={workout} />
             ))}
           </ul>
         )}

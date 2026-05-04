@@ -362,6 +362,54 @@ If the user is not authenticated when the action runs, it returns an error state
 
 #### Monday
 
+- Edit workflow
+- Delete workflow
+- Full CRUD demonstrated
+- UI updates correctly after change
+- Error or fallback handling
+- Short CRUD explanation
+- Peer review notes
+
+By the end of Monday, associates should submit or show:
+
+- **Edit workflow**
+  - At least one workout field can be edited
+  - Associate can explain how the correct record is selected
+  - Updated data is reflected after save
+- **Delete workflow**
+  - At least one workout record can be deleted
+  - Associate can explain what happens after delete
+  - Removed workout no longer appears in the visible list
+- **Full CRUD cycle demonstrated**
+  - Create
+  - Read
+  - Update
+  - Delete
+- **UI update after change**
+  - Workout history reflects edit changes
+  - Workout history reflects delete changes
+  - No stale or obviously incorrect data remains visible
+- **Error or fallback handling**
+  - Associate has considered what happens if edit or delete fails
+  - At minimum, one visible message or handling path exists
+- **Short CRUD explanation**
+  - 2–4 sentences explaining what CRUD means in this app
+  - 2–4 sentences explaining why gym owners need the full workflow
+- **Peer review notes**
+  - One part of CRUD that works well
+  - One bug or confusion point
+  - One improvement to the edit/delete flow
+
+#### CRUD Explanation (Written)
+
+In this app, CRUD means gym owners can create workouts, read workout history, update saved sessions, and delete records that should no longer be kept. The workflow is tied to authenticated ownership so each owner only edits or deletes their own workout data, and the UI refreshes after each change so history stays accurate. Full CRUD matters for real coaching operations because plans and notes change over time and incorrect records need cleanup. Without update and delete, owners would either keep bad data or re-enter sessions manually, which slows coaching and hurts trust in analytics.
+
+#### Peer Review Notes
+
+- One part of CRUD that works well
+- One bug or confusion point
+- One improvement to the edit/delete flow
+
 ---
 
 ## Week 1 Setup

@@ -4,7 +4,7 @@ const PROTECTED_ROUTES = ["/dashboard", "/workouts", "/analytics", "/ai", "/prof
 const LOGIN_PATH = "/login"
 const SESSION_COOKIE = "power_session"
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const isProtected = PROTECTED_ROUTES.some((route) => pathname.startsWith(route))
 

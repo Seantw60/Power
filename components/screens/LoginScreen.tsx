@@ -12,8 +12,8 @@ const DEMO_PASSWORD = "password123"
 export function LoginScreen() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [email, setEmail] = useState(DEMO_EMAIL)
-  const [password, setPassword] = useState(DEMO_PASSWORD)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)

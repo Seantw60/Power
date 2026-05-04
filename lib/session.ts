@@ -58,6 +58,8 @@ export async function getCurrentUser(): Promise<AuthenticatedUser | null> {
 
   if (!session) {
     cookieStore.delete(SESSION_COOKIE_NAME)
+    // Fire-and-forget: clean up any expired sessions for this user
+    void prisma.session.deleteMany({ where: { expiresAt: { lt: new Date() } } })
     return null
   }
 

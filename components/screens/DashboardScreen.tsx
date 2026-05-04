@@ -5,15 +5,20 @@ import { MotionButton } from "@/components/ui/MotionButton"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
-const kpiCards = [
-  { label: "Active Members", value: "47", trend: "Desktop - Primary" },
-  { label: "Workout This week", value: "126", trend: "Current period" },
-  { label: "Avg. Attendance", value: "82%", trend: "Current period" },
-]
+type DashboardScreenProps = {
+  memberCount: number
+  weeklyWorkouts: number
+}
 
-export function DashboardScreen() {
+export function DashboardScreen({ memberCount, weeklyWorkouts }: DashboardScreenProps) {
   const router = useRouter()
   const [status, setStatus] = useState("Ready")
+
+  const kpiCards = [
+    { label: "Active Members", value: String(memberCount), trend: "Total registered" },
+    { label: "Workouts This Week", value: String(weeklyWorkouts), trend: "Current week" },
+    { label: "Avg. Attendance", value: "—", trend: "Coming soon" },
+  ]
 
   return (
     <AppShell
