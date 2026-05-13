@@ -410,6 +410,93 @@ In this app, CRUD means gym owners can create workouts, read workout history, up
 - One bug or confusion point
 - One improvement to the edit/delete flow
 
+### Week 6
+
+#### Monday
+
+- AI feature connected to real app data
+- Working AI request flow
+- Visible AI output in app
+- Loading state
+- Error or failure state
+- Revised AI prompt
+- AI value and limits note
+- Peer review notes
+
+By the end of Monday, associates should submit or show:
+
+- **AI feature connected to real app data**
+  - The AI feature uses actual member or workout data from the project
+  - Associate can explain exactly what data is being sent
+- **Working AI request flow**
+  - The AI request can be triggered from inside the app
+  - Associate can explain where the request starts and where the result returns
+- **Visible AI output in the app**
+  - AI result is displayed in the UI
+  - Result is readable and clearly labeled
+- **Loading state**
+  - User sees a loading message, spinner, or other clear state while waiting for the AI response
+- **Error or failure state**
+  - User sees a visible message if the AI request fails
+  - Associate can explain at least one reason the request might fail
+- **Revised AI prompt**
+  - The original prompt has been improved based on real output testing
+  - Associate can explain what was changed and why
+- **AI value and limits note** — 2–4 sentences explaining:
+  - What the AI feature helps with
+  - What its limits are
+  - Why the feature still needs human judgment
+- **Peer review notes**
+  - One strong part of the AI feature
+  - One issue with the output or display
+  - One improvement to the prompt or error handling
+
+#### Tuesday
+
+- Working Jest setup
+- At least 2 meaningful tests
+- Test result evidence
+- At least 1 real bug fix
+- Bug-fix note
+- Reliability improvement
+- CI strengthening
+- Peer review notes
+
+By the end of Tuesday, associates should submit or show:
+
+- **Working Jest setup**
+  - Jest is installed and runnable in the project
+  - Associate can explain how tests are started
+- **At least 2 meaningful tests** — examples could include:
+  - Validation logic
+  - Helper or utility logic
+  - Formatting logic for AI output
+  - Route-related helper behavior
+  - Data transformation logic
+- **Test result evidence**
+  - Passing output, screenshots, terminal output, or a live run
+  - Associate can explain what each test is proving
+- **At least 1 real bug fix**
+  - Associate identifies one bug
+  - Associate explains what caused it
+  - Associate explains how it was fixed
+- **Bug-fix note** — 2–4 sentences explaining:
+  - What broke
+  - How they discovered it
+  - How they fixed it
+- **Reliability improvement** — one visible improvement beyond the bug fix; possible examples:
+  - Cleaner validation
+  - Clearer error messages
+  - Safer fallback state
+  - Cleaner handling of empty or malformed data
+- **CI strengthening**
+  - CI includes checks that still matter at this stage
+  - If possible, tests are added into the CI flow or discussed as the next step
+- **Peer review notes**
+  - One strong test
+  - One test that needs a clearer purpose
+  - One bug-fix explanation that needs improvement
+
 ---
 
 ## Week 1 Setup
