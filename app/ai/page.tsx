@@ -1,4 +1,5 @@
 import { AIScreen } from "@/components/screens/AIScreen"
+import { prisma } from "@/lib/prisma"
 import { requireUser } from "@/lib/session"
 
 export const metadata = {
@@ -6,7 +7,17 @@ export const metadata = {
 }
 
 export default async function AIPage() {
-  await requireUser("/ai")
+  const user = await requireUser("/ai")
 
-  return <AIScreen />
+  const members = await prisma.member.findMany({
+    where: { ownerId: user.id },
+    select: {
+      id: true,
+      name: true,
+      goal: true,
+    },
+    orderBy: { name: "asc" },
+  })
+
+  return <AIScreen members={members} />
 }

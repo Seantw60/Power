@@ -49,6 +49,23 @@ describe("workout validation", () => {
     expect(result.errors.notes).toBeDefined()
   })
 
+  it("rejects a negative weight value", () => {
+    const input = workoutInputFromJson({
+      memberId: "member-1",
+      exerciseName: "Back Squat",
+      sets: 4,
+      reps: 8,
+      weight: -25,
+      notes: "Testing negative value",
+      date: "2026-05-01",
+    })
+
+    const result = validateWorkoutInput(input)
+
+    expect(result.parsed).toBeNull()
+    expect(result.errors.weight).toBe("Weight cannot be negative")
+  })
+
   it("accepts a valid workout update payload", () => {
     const input = workoutUpdateInputFromJson({
       workoutId: "workout-1",

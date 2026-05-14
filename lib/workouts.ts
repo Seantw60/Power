@@ -137,6 +137,10 @@ export function validateWorkoutInput(input: WorkoutInput): {
     errors.weight = "Weight must be a valid number"
   }
 
+  if (weight !== null && weight < 0) {
+    errors.weight = "Weight cannot be negative"
+  }
+
   const dateString = input.date || new Date().toISOString().slice(0, 10)
   const date = new Date(dateString)
   if (Number.isNaN(date.getTime())) {

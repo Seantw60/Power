@@ -591,3 +591,45 @@ Workout history in `app/workouts/page.tsx` is fetched server-side with Prisma us
 ### Week 4 Tuesday — Form-to-Display Explanation
 
 Submitting the workout form runs validation and save logic, then writes Workout and WorkoutItem data through Prisma. After save, `revalidatePath("/workouts")` causes fresh server data to load and the new workout appears in the history list immediately. This closes the full loop from form input to persisted record to visible UI.
+
+## Week 6 Completion Notes
+
+### Week 6 Monday — AI Request Flow Explanation
+
+The AI flow starts on `app/ai/page.tsx`, where the authenticated gym owner's members are loaded from Prisma and passed to the AI screen. When the coach submits a prompt in `components/screens/AIScreen.tsx`, the client sends a POST request to `app/api/ai/route.ts` with member id, requested goal focus, time horizon, confidence, and prompt text. The API route verifies the session with `getCurrentUser()`, confirms ownership of the selected member, fetches recent workouts plus workout items, and then calls OpenAI through `lib/ai.ts`. The response is normalized into a readable insight list and returned to the UI, which shows loading, success output, or a visible error state.
+
+### Week 6 Monday — Revised AI Prompt Note
+
+The prompt strategy was revised from a generic coaching request to a context-rich structure that includes member profile goal, requested focus, coaching horizon, confidence preference, and recent exercise history with sets/reps/weight. This change improved output specificity by anchoring recommendations to real workout data instead of abstract advice. The system prompt now also requires structured JSON output (`{"insights": [...]}`) so the UI can render consistently.
+
+### Week 6 Monday — AI Value and Limits Note
+
+This AI feature helps gym owners quickly generate draft coaching guidance based on recent training history, which reduces planning friction between sessions. Its limits are that model output can still be incomplete, overly generic, or misaligned with injury context and athlete readiness that may not exist in the data. AI recommendations are decision support, not final programming. A coach must review and adjust output before sharing with members.
+
+### Week 6 Monday — Peer Review Notes
+
+- Strong: The AI flow uses authenticated ownership checks before querying member history, which protects data boundaries.
+- Issue: If a member has no workout history yet, no insight is generated.
+- Improvement: Add a starter recommendation mode that gives a safe baseline plan when history is empty.
+
+### Week 6 Tuesday — Test Evidence
+
+Vitest is configured and runnable through `npm test` or one-shot with `npm test -- --run`. New meaningful tests were added in `lib/ai.test.ts` to verify workout context formatting and resilient AI output parsing (JSON and plain-text fallback), and in `lib/workouts.test.ts` to lock the negative weight validation path. These tests verify helper behavior that directly affects generated coaching quality and data integrity.
+
+### Week 6 Tuesday — Bug-Fix Note
+
+A real bug was identified in workout validation: negative weight values were accepted and could be saved into workout history. This was discovered while reviewing edge-case validation for Week 6 reliability improvements. The fix adds an explicit guard in `validateWorkoutInput` that rejects weights below zero and returns a clear field error. A regression test was added so future changes do not reintroduce the issue.
+
+### Week 6 Tuesday — Reliability Improvement Note
+
+The AI route now provides clearer failure messaging for common failure paths: unauthenticated requests, invalid JSON payloads, missing member selection, empty prompts, missing workout history, and missing `OPENAI_API_KEY`. The AI screen surfaces these messages directly so coaches can recover without guessing what failed. This improves trust and reduces dead-end UI states.
+
+### Week 6 Tuesday — CI Strengthening Note
+
+The CI workflow now includes `npx prisma validate` to catch schema issues early and `npm run build` to catch compile/runtime build regressions before merge. Existing install, Prisma client generation, lint, and test checks remain in place.
+
+### Week 6 Tuesday — Peer Review Notes
+
+- Strong test: AI parser fallback test clearly validates behavior when the model returns non-JSON text.
+- Needs clearer purpose: Additional route-level tests for auth failures would further prove API protection, but are not yet included.
+- Bug-fix explanation improvement: Include before/after sample payloads in future notes for even faster reviewer verification.

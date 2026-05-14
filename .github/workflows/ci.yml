@@ -27,11 +27,17 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
+      - name: Validate Prisma Schema
+        run: npx prisma validate
+
       - name: Lint
         run: npm run lint
 
       - name: Run tests
         run: npm test -- --run
+
+      - name: Build
+        run: npm run build
 
       - name: Check required files exist
         run: |
