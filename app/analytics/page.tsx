@@ -37,14 +37,16 @@ export default async function AnalyticsPage() {
     }),
   ])
 
+  type WorkoutRow = { date: Date; memberId: string | null }
+
   const monthlyWorkouts = months.map((bucket) => ({
     label: bucket.label,
-    count: allWorkouts.filter((w) => w.date >= bucket.start && w.date < bucket.end).length,
+    count: (allWorkouts as WorkoutRow[]).filter((w) => w.date >= bucket.start && w.date < bucket.end).length,
   }))
 
   const memberFrequency = members.map((member) => ({
     name: member.name,
-    count: allWorkouts.filter((w) => w.memberId === member.id).length,
+    count: (allWorkouts as WorkoutRow[]).filter((w) => w.memberId === member.id).length,
   })).sort((a, b) => b.count - a.count)
 
   const totalWorkouts = allWorkouts.length
