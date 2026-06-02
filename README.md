@@ -608,9 +608,7 @@ This AI feature helps gym owners quickly generate draft coaching guidance based 
 
 ### Week 6 Monday — Peer Review Notes
 
-- Strong: The AI flow uses authenticated ownership checks before querying member history, which protects data boundaries.
-- Issue: If a member has no workout history yet, no insight is generated.
-- Improvement: Add a starter recommendation mode that gives a safe baseline plan when history is empty.
+- 
 
 ### Week 6 Tuesday — Test Evidence
 
@@ -630,6 +628,4 @@ The CI workflow now includes `npx prisma validate` to catch schema issues early 
 
 ### Week 6 Tuesday — Peer Review Notes
 
-- Strong test: AI parser fallback test clearly validates behavior when the model returns non-JSON text.
-- Needs clearer purpose: Additional route-level tests for auth failures would further prove API protection, but are not yet included.
-- Bug-fix explanation improvement: Include before/after sample payloads in future notes for even faster reviewer verification.
+- 
