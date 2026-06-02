@@ -8,9 +8,10 @@ import { useState } from "react"
 type DashboardScreenProps = {
   memberCount: number
   weeklyWorkouts: number
+  recentWorkouts: { id: string; memberName: string; date: string }[]
 }
 
-export function DashboardScreen({ memberCount, weeklyWorkouts }: DashboardScreenProps) {
+export function DashboardScreen({ memberCount, weeklyWorkouts, recentWorkouts }: DashboardScreenProps) {
   const router = useRouter()
   const [status, setStatus] = useState("Ready")
 
@@ -55,11 +56,17 @@ export function DashboardScreen({ memberCount, weeklyWorkouts }: DashboardScreen
       <div className="mt-4 grid gap-4 lg:grid-cols-[2fr_1fr]">
         <FadeCard>
           <h2 className="text-2xl leading-none sm:text-3xl">Activity Feed</h2>
-          <ul className="mt-3 space-y-2 text-base leading-tight sm:text-2xl">
-            <li>- Mike T: Bench +10 lbs</li>
-            <li>- 3 missed sessions this week</li>
-            <li>- Reminder: update Deload plans</li>
-          </ul>
+          {recentWorkouts.length === 0 ? (
+            <p className="mt-3 text-sm text-[#4a7aab]">No workouts logged yet. Log a session to see recent activity here.</p>
+          ) : (
+            <ul className="mt-3 space-y-2 text-base leading-tight sm:text-2xl">
+              {recentWorkouts.map((item) => (
+                <li key={item.id}>
+                  — {item.memberName}: session on {item.date}
+                </li>
+              ))}
+            </ul>
+          )}
         </FadeCard>
 
         <FadeCard>

@@ -13,10 +13,22 @@ export default async function DashboardPage() {
   startOfWeek.setHours(0, 0, 0, 0)
   startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay())
 
-  const [memberCount, weeklyWorkouts] = await Promise.all([
+  const [memberCount, weeklyWorkouts, recentWorkouts] = await Promise.all([
     prisma.member.count({ where: { ownerId: user.id } }),
     prisma.workout.count({ where: { userId: user.id, date: { gte: startOfWeek } } }),
+    prisma.workout.findMany({
+      where: { userId: user.id },
+      include: { member: { select: { name: true } } },
+      orderBy: { date: "desc" },
+      take: 5,
+    }),
   ])
 
-  return <DashboardScreen memberCount={memberCount} weeklyWorkouts={weeklyWorkouts} />
+  const feed = recentWorkouts.map((w) => ({
+    id: w.id,
+    memberName: w.member.name,
+    date: w.date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+  }))
+
+  return <DashboardScreen memberCount={memberCount} weeklyWorkouts={weeklyWorkouts} recentWorkouts={feed} />
 }

@@ -1,5 +1,15 @@
 version: '3.8'
 
+# Required environment variables (set in .env or shell before running):
+#   DATABASE_URL       - Full PostgreSQL connection string (auto-built from vars below)
+#   POSTGRES_USER      - Database username (default: power_user)
+#   POSTGRES_PASSWORD  - Database password (default: power_password)
+#   POSTGRES_DB        - Database name (default: power_gym)
+#   OPENAI_API_KEY     - Required for the AI Insights feature
+#   SESSION_SECRET     - Used to sign session cookies (set a strong random value)
+#
+# Usage: docker compose up --build
+
 services:
   db:
     image: postgres:16-alpine
@@ -23,15 +33,14 @@ services:
       dockerfile: Dockerfile
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-power_user}:${POSTGRES_PASSWORD:-power_password}@db:5432/${POSTGRES_DB:-power_gym}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      SESSION_SECRET: ${SESSION_SECRET}
+      NODE_ENV: production
     ports:
       - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/.next
 
 volumes:
   postgres_data:
