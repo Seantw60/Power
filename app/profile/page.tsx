@@ -16,7 +16,7 @@ export default async function ProfilePage() {
       name={user.name ?? ""}
       email={user.email}
       memberCount={memberCount}
-      createdAt={user.createdAt}
+      createdAt={user.createdAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
     />
   )
 }

@@ -9,7 +9,7 @@ type ProfileScreenProps = {
   name: string
   email: string
   memberCount: number
-  createdAt: Date
+  createdAt: string
 }
 
 const initialState: ProfileFormState = {
@@ -80,10 +80,7 @@ export function ProfileScreen({ name, email, memberCount, createdAt }: ProfileSc
             <ul className="mt-3 space-y-2 text-base leading-tight sm:text-2xl">
               <li>Role: Owner Coach</li>
               <li>Members: {memberCount} registered</li>
-              <li>
-                Created:{" "}
-                {createdAt.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
-              </li>
+              <li>Created: {createdAt}</li>
             </ul>
           </FadeCard>
         </div>

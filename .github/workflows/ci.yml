@@ -50,6 +50,7 @@ jobs:
           echo "Checking app folder structure..."
           test -d app/\(auth\)/login || (echo "MISSING: app/(auth)/login" && exit 1)
           test -d app/dashboard || (echo "MISSING: app/dashboard" && exit 1)
+          test -d app/members || (echo "MISSING: app/members" && exit 1)
           test -d app/workouts || (echo "MISSING: app/workouts" && exit 1)
           test -d app/analytics || (echo "MISSING: app/analytics" && exit 1)
           test -d app/ai || (echo "MISSING: app/ai" && exit 1)

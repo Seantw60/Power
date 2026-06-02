@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-const PROTECTED_ROUTES = ["/dashboard", "/workouts", "/analytics", "/ai", "/profile"]
+const PROTECTED_ROUTES = ["/dashboard", "/members", "/workouts", "/analytics", "/ai", "/profile"]
 const LOGIN_PATH = "/login"
 const SESSION_COOKIE = "power_session"
 
@@ -24,5 +24,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/workouts/:path*", "/analytics/:path*", "/ai/:path*", "/profile/:path*"],
+  matcher: ["/dashboard/:path*", "/members/:path*", "/workouts/:path*", "/analytics/:path*", "/ai/:path*", "/profile/:path*"],
 }

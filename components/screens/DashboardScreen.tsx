@@ -3,7 +3,6 @@
 import { AppShell, FadeCard } from "@/components/AppShell"
 import { MotionButton } from "@/components/ui/MotionButton"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 
 type DashboardScreenProps = {
   memberCount: number
@@ -13,7 +12,6 @@ type DashboardScreenProps = {
 
 export function DashboardScreen({ memberCount, weeklyWorkouts, recentWorkouts }: DashboardScreenProps) {
   const router = useRouter()
-  const [status, setStatus] = useState("Ready")
 
   const kpiCards = [
     { label: "Active Members", value: String(memberCount), trend: "Total registered" },
@@ -29,20 +27,15 @@ export function DashboardScreen({ memberCount, weeklyWorkouts, recentWorkouts }:
         <>
           <MotionButton
             onClick={() => {
-              setStatus("Navigated to Workouts")
               router.push("/workouts")
             }}
           >
             Add Workout
           </MotionButton>
-          <MotionButton variant="ghost" onClick={() => setStatus("Add Member flow opened")}>Add Member</MotionButton>
+          <MotionButton variant="ghost" onClick={() => router.push("/members")}>Add Member</MotionButton>
         </>
       }
     >
-      <FadeCard>
-        <p className="text-xs sm:text-sm">Action Status: {status}</p>
-      </FadeCard>
-
       <div className="grid gap-4 md:grid-cols-3">
         {kpiCards.map((card) => (
           <FadeCard key={card.label}>
@@ -70,37 +63,14 @@ export function DashboardScreen({ memberCount, weeklyWorkouts, recentWorkouts }:
         </FadeCard>
 
         <FadeCard>
-          <h2 className="text-2xl leading-none sm:text-3xl">Context Panel</h2>
-          <div className="mt-3 space-y-3 text-base leading-tight sm:text-2xl">
-            <div>
-              <p>Upcoming Sessions</p>
-              <p className="mt-1">- 4:30 PM Sarah L</p>
-              <p>5:15 PM - Mike T</p>
-            </div>
-            <div>
-              <p>At-Risk Members</p>
-              <p className="mt-1">- 5 low attendance</p>
-            </div>
+          <h2 className="text-2xl leading-none sm:text-3xl">Quick Actions</h2>
+          <div className="mt-3 flex flex-col gap-2">
+            <MotionButton onClick={() => router.push("/workouts")}>Log Workout</MotionButton>
+            <MotionButton variant="secondary" onClick={() => router.push("/workouts")}>View History</MotionButton>
+            <MotionButton variant="ghost" onClick={() => router.push("/ai")}>AI Insights</MotionButton>
           </div>
         </FadeCard>
       </div>
-
-      <FadeCard className="mt-4">
-        <h2 className="text-2xl leading-none sm:text-3xl">Quick Actions</h2>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <MotionButton onClick={() => setStatus("Add Member flow opened")}>Add Member</MotionButton>
-          <MotionButton variant="ghost" onClick={() => setStatus("History panel refreshed")}>View History</MotionButton>
-          <MotionButton
-            variant="ghost"
-            onClick={() => {
-              setStatus("Navigated to Insights")
-              router.push("/ai")
-            }}
-          >
-            Open Insights
-          </MotionButton>
-        </div>
-      </FadeCard>
     </AppShell>
   )
 }

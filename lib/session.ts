@@ -11,6 +11,7 @@ export type AuthenticatedUser = {
   email: string
   name: string | null
   role: string
+  createdAt: Date
 }
 
 export function getSessionTtlSeconds(): number {
@@ -51,6 +52,7 @@ export async function getCurrentUser(): Promise<AuthenticatedUser | null> {
           email: true,
           name: true,
           role: true,
+          createdAt: true,
         },
       },
     },

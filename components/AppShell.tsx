@@ -13,6 +13,7 @@ type AppShellProps = PropsWithChildren<{
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard" },
+  { href: "/members", label: "Members" },
   { href: "/workouts", label: "Workouts" },
   { href: "/analytics", label: "Analytics" },
   { href: "/ai", label: "Insights" },
@@ -100,7 +101,7 @@ export function AppShell({ title, subtitle, actions, children }: AppShellProps) 
       </motion.div>
 
       <nav className="fixed inset-x-2 bottom-2 z-20 border-2 border-[#1d4f91] bg-[#f8fcff] p-1 shadow-[3px_3px_0_#14447d] sm:hidden">
-        <div className="grid grid-cols-5 text-center text-[11px] leading-none text-[#1c4e83]">
+        <div className="grid grid-cols-6 text-center text-[11px] leading-none text-[#1c4e83]">
           {navItems.map((item) => {
             const isActive = pathname === item.href
 
