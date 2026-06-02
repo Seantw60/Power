@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react"
 
 type MotionButtonProps = PropsWithChildren<
-  ButtonHTMLAttributes<HTMLButtonElement> & {
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onAnimationStart" | "onDrag" | "onDragEnd" | "onDragStart"> & {
     variant?: "primary" | "secondary" | "ghost"
   }
 >

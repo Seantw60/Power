@@ -111,7 +111,7 @@ function WorkoutHistoryCard({ workout }: { workout: WorkoutWithItems }) {
               <textarea
                 name="notes"
                 rows={3}
-                defaultValue={workout.notes}
+                defaultValue={workout.notes ?? undefined}
                 className="w-full border border-[#89aed7] bg-white px-2 py-1 text-[#10233f]"
                 placeholder="Update session notes"
               />
